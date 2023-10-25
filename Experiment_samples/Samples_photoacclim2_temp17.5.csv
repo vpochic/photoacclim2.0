@@ -1,0 +1,13 @@
+Species;Irradiance;Replicate;Name;Temp;Vs_Pigments;Vs_CHN;Vs_Absorption;Vs_PE;Number_coulter;CV.number;Cell_count;Unit_cell_count;Lower_limit_microm;Upper_limit_microm;Diameter;CV.diameter;Unit_diameter;Biovolume;Unit_biovolume
+Meso;20;1;Meso20_1a;17,5;5;Na;5;10;576,7;0,067;11534;cells_per_mL;13,9;27,75;19,3;0,004;microm;3764,181443;microm3
+Meso;20;2;Meso20_2a;17,5;5;Na;5;10;614;0,078;12280;cells_per_mL;14,54;30,74;19,2;0,002;microm;3705,973491;microm3
+Meso;20;3;Meso20_3a;17,5;5;Na;5;10;507,7;0,035;10154;cells_per_mL;15,05;30,74;19,2;0,004;microm;3705,973491;microm3
+Meso;65;1;Meso65_1;17,5;5;Na;5;10;1267;0,104;25340;cells_per_mL;15,05;30,39;20,2;0,004;microm;4315,714737;microm3
+Meso;65;2;Meso65_2;17,5;5;Na;5;10;1321;0,01;26420;cells_per_mL;15,22;28,72;20,2;0,007;microm;4315,714737;microm3
+Meso;65;3;Meso65_3;17,5;5;Na;5;10;1064;0,039;21280;cells_per_mL;15,92;30,39;20,1;0,002;microm;4188,790205;microm3
+Meso;120;1;Meso120_1;17,5;5;Na;5;10;1544;0,026;30880;cells_per_mL;15,39;29,04;20,9;0,017;microm;4780,105486;microm3
+Meso;120;2;Meso120_2;17,5;5;Na;5;10;1642;0,046;32840;cells_per_mL;15,22;29,71;20,7;0,006;microm;4644,186575;microm3
+Meso;120;3;Meso120_3;17,5;5;Na;5;10;1551;0,023;31020;cells_per_mL;15,39;29,37;20,7;0,002;microm;4644,186575;microm3
+Meso;220;1;Meso220_1;17,5;5;Na;5;10;1849;0,014;36980;cells_per_mL;15,39;32,9;20,6;0,002;microm;4510,868902;microm3
+Meso;220;2;Meso220_2;17,5;5;Na;5;10;1768;0,071;35360;cells_per_mL;15,39;30,05;20,7;0,008;microm;4644,186575;microm3
+Meso;220;3;Meso220_3;17,5;5;Na;5;10;1759;0,036;35180;cells_per_mL;15,39;29,71;20,6;0,001;microm;4577,204154;microm3
