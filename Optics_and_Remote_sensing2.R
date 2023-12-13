@@ -10,7 +10,7 @@
 ### of the script
 
 ####### Script Photoacclim 2.0: Optics and remote sensing ###
-### Date of last modification: 2023/10/25
+### Date of last modification: 2023/12/13
 # Author: Victor Pochic, ISOMer, Nantes Universite
 
 # This scripts processes and plots data of optics and remote sensing presented in the article.
@@ -44,6 +44,28 @@ field_data <- left_join(field_HPLC, field_Rrs, by = 'Station') %>%
   # with gons inversion algorithm
   mutate_at(vars(-c('Station')), list(~ as.numeric(.))) %>%
   filter(Station != 'PT09') # remove point 9
+
+#### Import experimental data ####
+
+### Tables of sample information
+
+Samples_photoacclim2 <- read.csv2('Experiment_samples/Samples_photoacclim2.csv', header = TRUE)
+Samples_photoacclim2_temp17.5 <- read.csv2('Experiment_samples/Samples_photoacclim2_temp17.5.csv', header = TRUE)
+
+# Changing the row to integer
+Samples_photoacclim2_temp17.5 <- Samples_photoacclim2_temp17.5 %>%
+  mutate(Vs_CHN = as.numeric(Vs_CHN))
+
+# Combine both tables  
+Sample_list <- bind_rows(Samples_photoacclim2, Samples_photoacclim2_temp17.5)
+
+### Table of filter parameters
+
+Parameters_filters_20220429 <- read.csv2('Optics_photoacclim/Parameters_filters_20220429.csv', header = TRUE)
+Parameters_filters_20221215 <- read.csv2('Optics_photoacclim/Parameters_filters_20221215.csv', header = TRUE)
+
+# Combining tables
+Parameters_filters <- bind_rows(Parameters_filters_20220429, Parameters_filters_20221215)
 
 #### AbsCuvette vs AbsFilter ####
 
@@ -354,7 +376,7 @@ AbsCuvette <- mutate_at(ODCuvette_cor, vars(-'nm'), list(~ OD_to_abs.cuvette(as.
   rename(Meso200_2 = MES200_R2) %>%
   rename(Meso200_3 = MES200_R3) %>%
   mutate_all(list(~ as.numeric(.))) %>%
-  select(all_of(c(Sample_list$Name, 'Wavel.'))) # And select the relevant values
+  select(all_of(c(Samples_photoacclim2$Name, 'Wavel.'))) # And select the relevant values
 
 AbsCuvette_comp <- mutate(AbsCuvette, Meso20_mean = (Meso20_1+Meso20_2+Meso20_3)/3) %>%
   mutate(Meso80_mean = (Meso80_1+Meso80_2+Meso80_3)/3) %>%
@@ -389,17 +411,18 @@ OD_to_abs.filter_nopl <- function(ODf, V, D)
 ### Computing absorption from OD (filters) -> experiment at 21 degrees Celsius
 AbsFilters_nopl <- ODFilters_cor %>%
   # Subtracting the mean of the blanks
-  mutate_at(vars(all_of(Parameters_filters$Sample)),
+  mutate_at(vars(all_of(Parameters_filters_20221215$Sample)),
             list(~ .-((Blank00 + Blank01 + Blank02 + Blank03 +
                          Blank04 + Blank05 + Blank06)/7))) %>%
-  select(all_of(c(Parameters_filters$Sample, 'nm'))) %>% # only mutating the samples spectra (not autozero, air or blank)
+  select(all_of(c(Parameters_filters_20221215$Sample, 'nm'))) %>% # only mutating the samples spectra (not autozero, air or blank)
   rename(Wavel. = nm) # Renaming the wavelength vector to match other dataframes
 
 # This for loop applies the function that computes absorption to all OD spectra, using the specific parameters recorded in
 # the Parameters_filters file
-for (i in 1:length(Parameters_filters$Sample)) {
+for (i in 1:length(Parameters_filters_20221215$Sample)) {
   AbsFilters_nopl <- mutate_at(AbsFilters_nopl, vars(colnames(AbsFilters_nopl)[i]), 
-                               list(~ OD_to_abs.filter_nopl(., Parameters_filters$Volume[i], Parameters_filters$Diameter[i])))
+                               list(~ OD_to_abs.filter_nopl(., Parameters_filters_20221215$Volume[i], 
+                                                            Parameters_filters_20221215$Diameter[i])))
 }
 
 
@@ -424,7 +447,7 @@ AbsFilters_nopl <- AbsFilters_nopl %>%
   rename(Tele200_1 = TEL200_R1_01) %>%
   rename(Tele200_2 = TEL200_R2_01) %>%
   mutate(Tele200_3 = (TEL200_R3_01+TEL200_R3_01)/2) %>%
-  select(all_of(c(Sample_list$Name, 'Wavel.'))) # And select the relevant values
+  select(all_of(c(Samples_photoacclim2$Name, 'Wavel.'))) # And select the relevant values
 
 AbsFilter_comp <- mutate(AbsFilters_nopl, Meso20_mean = (Meso20_1+Meso20_2+Meso20_3)/3) %>%
   mutate(Meso80_mean = (Meso80_1+Meso80_2+Meso80_3)/3) %>%
